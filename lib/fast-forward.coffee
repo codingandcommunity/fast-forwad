@@ -1,5 +1,6 @@
 FastForwardView = require './fast-forward-view'
 {CompositeDisposable} = require 'atom'
+npm = require '../../npm-plus/lib/npm-plus.js' #make sure you install the npm-plus package and include the file through path name
 
 module.exports = FastForward =
   fastForwardView: null
@@ -7,6 +8,7 @@ module.exports = FastForward =
   subscriptions: null
 
   activate: (state) ->
+
     @fastForwardView = new FastForwardView(state.fastForwardViewState)
     @modalPanel = atom.workspace.addRightPanel(item: @fastForwardView.getElement(), visible: false)
 
@@ -26,7 +28,7 @@ module.exports = FastForward =
 
   toggle: ->
     console.log 'FastForward was toggled!'
-
+    npm("install")  #this calls the npm function to install the depencies, this calls the function and that works but the fucntion fails rn
     if @modalPanel.isVisible()
       @modalPanel.hide()
     else
