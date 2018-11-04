@@ -8,7 +8,8 @@ module.exports = FastForward =
 
   activate: (state) ->
     @fastForwardView = new FastForwardView(state.fastForwardViewState)
-    @modalPanel = atom.workspace.addRightPanel(item: @fastForwardView.getElement(), visible: false)
+    # Create a panel for the plugin, visible by default
+    @modalPanel = atom.workspace.addRightPanel(item: @fastForwardView.getElement(), visible: true)
 
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
