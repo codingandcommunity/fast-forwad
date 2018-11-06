@@ -20,12 +20,24 @@ class FastForwardView
     )
     @element.appendChild(@button)
 
+    # Create button element
+    @button2 = document.createElement('button')
+    @button2.textContent = "Install Dependencies"
+    @button2.classList.add('btn-primary')
+    @button2.classList.add('btn')
+
+    # Event listening for button. Emits event to the FastForward module.
+    @button2.addEventListener('click', () =>
+      @emitter.emit('install-button-event')
+    )
+    @element.appendChild(@button2)
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 
   # Tear down any state and detach
   destroy: ->
     @button.removeEventListener('click', 0)
+    @button2.removeEventListener('click', 0)
     @element.remove()
 
   getElement: ->

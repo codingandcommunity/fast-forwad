@@ -1,5 +1,6 @@
 FastForwardView = require './fast-forward-view'
 {CompositeDisposable, Emitter} = require 'atom'
+npm = require '../../npm-plus/lib/npm-plus.js'
 
 module.exports = FastForward =
   fastForwardView: null
@@ -20,8 +21,10 @@ module.exports = FastForward =
 
     # Register command that toggles this view
     @subscriptions.add(atom.commands.add('atom-workspace', {'fast-forward:toggle': () => @toggle()}))
+    @subscriptions.add(atom.commands.add('atom-workspace', {'fast-forward:installdependencies': () =>  @installDependencies()}))
 
     @emitter.on 'toggle-button-event', => @toggle()
+    @emitter.on 'install-button-event', => @installDependencies()
 
   deactivate: ->
     @modalPanel.destroy()
@@ -38,3 +41,6 @@ module.exports = FastForward =
       @modalPanel.hide()
     else
       @modalPanel.show()
+
+  installDependencies: ->
+    npm("install")  #this calls the npm function to install the depencies, this calls the function and that works but the fucntion fails rn
