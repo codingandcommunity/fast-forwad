@@ -1,6 +1,9 @@
 FastForwardView = require './fast-forward-view'
 {CompositeDisposable, Emitter} = require 'atom'
 npm = require '../../npm-plus/lib/npm-plus.js'
+git = require 'simple-git'
+path = '/test'
+REPO = 'https://github.com/rmccue/test-repository'
 
 module.exports = FastForward =
   fastForwardView: null
@@ -43,4 +46,7 @@ module.exports = FastForward =
       @modalPanel.show()
 
   installDependencies: ->
-    npm("install")  #this calls the npm function to install the depencies, this calls the function and that works but the fucntion fails rn
+    console.log path
+    log = (err, idk) -> console.log err
+    git().clone REPO, path, log
+    console.log path
