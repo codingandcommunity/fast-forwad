@@ -2,7 +2,9 @@ FastForwardView = require './fast-forward-view'
 {CompositeDisposable, Emitter} = require 'atom'
 npm = require '../../npm-plus/lib/npm-plus.js'
 git = require 'simple-git'
-path = '/test'
+del = require 'del'
+path = atom.project.getPaths()[0]
+project_path = "#{ path }\\student_repo"
 REPO = 'https://github.com/rmccue/test-repository'
 
 module.exports = FastForward =
@@ -46,7 +48,24 @@ module.exports = FastForward =
       @modalPanel.show()
 
   installDependencies: ->
-    console.log path
-    log = (err, idk) -> console.log err
-    git().clone REPO, path, log
-    console.log path
+
+    #del project_path
+
+    #handler for just printing out errors for simplegit
+    errorlog = (err, idk) ->
+      if err != null
+        console.log err
+      else
+        console.log "successfull?"
+
+    ###handler for simple git checkIsRepo
+    repoCheck = (err, idk) ->
+      if err != null
+        console.log err
+      if idk
+        console.log "#{ project_path } is already a repo"
+
+    #git().cwd(project_path).checkIsRepo repoCheck
+    ###
+
+    git().clone REPO, project_path, errorlog
