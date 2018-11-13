@@ -77,12 +77,28 @@ class FastForwardView
     @next.textContent = "Next"
     @element.appendChild(@next)
 
+    # Button that executes copy function
+    copyBlock = document.createElement('div')
+    copyBlock.classList.add('block')
+
+    @copy = document.createElement('button')
+    @copy.classList.add('btn')
+    @copy.classList.add('btn-primary')
+    @copy.textContent = "Copy Changes"
+
+    @copy.addEventListener('click', () =>
+      @emitter.emit('copy-button-event')
+      )
+    copyBlock.appendChild(@copy)
+    @element.appendChild(copyBlock)
+
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 
   # Tear down any state and detach
   destroy: ->
     @button.removeEventListener('click', 0)
+    @copy.removeEventListener('click', 0)
     @element.remove()
 
   getElement: ->

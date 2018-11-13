@@ -1,6 +1,10 @@
 FastForwardView = require './fast-forward-view'
 {CompositeDisposable, Emitter} = require 'atom'
 
+fs = require 'fs'
+
+FF_Utils = require './ff-utils.js'
+
 module.exports = FastForward =
   fastForwardView: null
   modalPanel: null
@@ -22,6 +26,7 @@ module.exports = FastForward =
     @subscriptions.add(atom.commands.add('atom-workspace', {'fast-forward:toggle': () => @toggle()}))
 
     @emitter.on 'toggle-button-event', => @toggle()
+    @emitter.on 'copy-button-event', => @copy()
 
   deactivate: ->
     @modalPanel.destroy()
@@ -38,3 +43,6 @@ module.exports = FastForward =
       @modalPanel.hide()
     else
       @modalPanel.show()
+
+  copy: ->
+    FF_Utils.backupChanges()
