@@ -1,11 +1,27 @@
 FastForwardView = require './fast-forward-view'
 {CompositeDisposable, Emitter} = require 'atom'
-npm = require '../../npm-plus/lib/npm-plus.js'
 git = require 'simple-git'
-del = require 'del'
-path = atom.project.getPaths()[0]
-project_path = "#{ path }\\student_repo"
+fs = require 'fs'
+async = require 'async'
+
+project_directory = process.env['USERPROFILE'] + "\\Documents\\MyCodingAndCommunityProjects"
+
+plugin_path = atom.project.getPaths()[0]
+
+#have these entered in the plugin
 REPO = 'https://github.com/rmccue/test-repository'
+name = 'first project'
+base_project_path = project_directory + "\\My_first_project"
+project_path = base_project_path
+
+count = 0
+
+
+handler = (err) ->
+  if err != null
+    console.log err
+
+fs.mkdir(project_directory, handler)
 
 module.exports = FastForward =
   fastForwardView: null
@@ -49,23 +65,55 @@ module.exports = FastForward =
 
   installDependencies: ->
 
-    #del project_path
-
     #handler for just printing out errors for simplegit
     errorlog = (err, idk) ->
       if err != null
         console.log err
       else
-        console.log "successfull?"
+        console.log "successful?"
 
-    ###handler for simple git checkIsRepo
+    #handler for simple git checkIsRepo
     repoCheck = (err, idk) ->
       if err != null
         console.log err
       if idk
-        console.log "#{ project_path } is already a repo"
+        console.log "is already a repo"
+
+    projectStatHandler = (err, stat) ->
+      console.log err
+      console.log project_path
+      console.log count
+
+      if err && err.code == "ENOENT"
+        fs.mkdirSync(project_path)
+        console.log "made the Directory at #{ project_path }"
+
+      else
+        console.log('Directory already exists.')
+        count = count + 1
+        project_path = base_project_path + "(" + count + ")"
+
+        console.log count
+        console.log project_path
+
+        projectCheck()
+
+
+
+    projectCheck = () ->
+      fs.stat project_path, projectStatHandler
+
+
+    ###async.series([
+      function(callback) { ... },
+      function(callback) { ... }
+    ]);###
+    
+    projectCheck()
+    count = 0
+
 
     #git().cwd(project_path).checkIsRepo repoCheck
-    ###
+
 
     git().clone REPO, project_path, errorlog
