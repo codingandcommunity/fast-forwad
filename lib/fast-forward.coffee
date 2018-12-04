@@ -65,6 +65,9 @@ module.exports = FastForward =
 
   installDependencies: ->
 
+    clone = () ->
+      git().clone REPO, project_path, errorlog
+
     #handler for just printing out errors for simplegit
     errorlog = (err, idk) ->
       if err != null
@@ -85,7 +88,7 @@ module.exports = FastForward =
       console.log count
 
       if err && err.code == "ENOENT"
-        fs.mkdirSync(project_path)
+        fs.mkdir(project_path, clone)
         console.log "made the Directory at #{ project_path }"
 
       else
@@ -108,12 +111,9 @@ module.exports = FastForward =
       function(callback) { ... },
       function(callback) { ... }
     ]);###
-    
+
     projectCheck()
     count = 0
 
 
     #git().cwd(project_path).checkIsRepo repoCheck
-
-
-    git().clone REPO, project_path, errorlog
