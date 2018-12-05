@@ -2,7 +2,7 @@ FastForwardView = require './fast-forward-view'
 {CompositeDisposable, Emitter} = require 'atom'
 git = require 'simple-git'
 fs = require 'fs'
-async = require 'async'
+cmd = require 'node-cmd'
 
 project_directory = process.env['USERPROFILE'] + "\\Documents\\MyCodingAndCommunityProjects"
 
@@ -63,57 +63,50 @@ module.exports = FastForward =
     else
       @modalPanel.show()
 
+  #brads button
   installDependencies: ->
 
+    #clones the repo inside of the project path
     clone = () ->
       git().clone REPO, project_path, errorlog
 
-    #handler for just printing out errors for simplegit
+    #handler for just printing out errors for simplegit which just prints out the error
     errorlog = (err, idk) ->
       if err != null
         console.log err
-      else
-        console.log "successful?"
 
-    #handler for simple git checkIsRepo
-    repoCheck = (err, idk) ->
-      if err != null
-        console.log err
-      if idk
-        console.log "is already a repo"
-
+    #handler for chekcing the status for the directory
     projectStatHandler = (err, stat) ->
-      console.log err
-      console.log project_path
-      console.log count
 
+      #if the directory exists then create the directory and then the callback function clones the repo
       if err && err.code == "ENOENT"
         fs.mkdir(project_path, clone)
         console.log "made the Directory at #{ project_path }"
 
+      #otherwise add one to project path and then check the path again
       else
         console.log('Directory already exists.')
         count = count + 1
         project_path = base_project_path + "(" + count + ")"
 
-        console.log count
-        console.log project_path
-
         projectCheck()
 
-
-
+    #calls fs.stat which checks the status of a directory
     projectCheck = () ->
       fs.stat project_path, projectStatHandler
 
-
-    ###async.series([
-      function(callback) { ... },
-      function(callback) { ... }
-    ]);###
-
+    #the button code to find the correct project directory and clone it from github
     projectCheck()
     count = 0
 
+    #handler to print out stuff from cmd
+    cmdHandler = (err, data, stderr) ->
+      console.log err
+      console.log data
+      console.log stderr
 
-    #git().cwd(project_path).checkIsRepo repoCheck
+    #install the dependencies from the newly cloned project
+    cmd.get(
+      '
+        dir
+      ', cmdHandler)

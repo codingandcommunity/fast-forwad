@@ -22,7 +22,7 @@ class FastForwardView
 
     # Create button element
     @button2 = document.createElement('button')
-    @button2.textContent = "Install Dependencies"
+    @button2.textContent = "Clone Repo"
     @button2.classList.add('btn-primary')
     @button2.classList.add('btn')
 
