@@ -1,4 +1,5 @@
 FastForwardView = require './fast-forward-view'
+InstructionView = require './instruction-screen'
 {CompositeDisposable, Emitter} = require 'atom'
 
 module.exports = FastForward =
@@ -10,7 +11,7 @@ module.exports = FastForward =
   activate: (state) ->
     # Construct Emitter, then pass Emitter into construct fastForwardView.
     @emitter = new Emitter()
-    @fastForwardView = new FastForwardView(state.fastForwardViewState, @emitter)
+    @fastForwardView = new InstructionView(state.fastForwardViewState, @emitter)
 
     # Create a panel for the plugin, visible by default
     @modalPanel = atom.workspace.addRightPanel(item: @fastForwardView.getElement(), visible: true)

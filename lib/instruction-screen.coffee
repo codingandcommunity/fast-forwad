@@ -1,5 +1,5 @@
 module.exports =
-class FastForwardView
+class InstructionView
   constructor: (serializedState, emitter) ->
     # Set Emitter field variable.
     @emitter = emitter
@@ -23,7 +23,7 @@ class FastForwardView
 
     # Create heading (title)
     @heading = document.createElement('h1')
-    @heading.textContent = "Welcome to Warp Drive!"
+    @heading.textContent = "Page Title"
     @element.appendChild(@heading)
 
     # Create main body section
@@ -33,23 +33,27 @@ class FastForwardView
     @element.appendChild(@message)
 
     @intro = document.createElement('p')
-    @intro.textContent = "Warp Drive is here to accelerate your journey to become a great programmer!"
+    @intro.textContent = "Main Body section"
     @message.appendChild(@intro)
-    @intro = document.createElement('p')
-    @intro.textContent = "Let's get started!"
-    @message.appendChild(@intro)
+
+    # Create sample code section
+    @code = document.createElement('pre')
+    @message.classList.add('codeSnippet')
+    @message.textContent = 'console.log("This is code");'
+    @element.appendChild(@message)
+
+    # Create sample hint section
+    @hint = document.createElement('div')
+    @hint.id = "hint"
+    @hint.textContent = "Hint section (default hidden)"
+    @element.appendChild(@hint)
 
     # Create next button
     @next = document.createElement('button')
     @next.classList.add('btn')
     @next.classList.add('btn-primary')
-    @next.textContent = "Start"
+    @next.textContent = "Next"
     @element.appendChild(@next)
-
-    # Event listening for button. Emits event to the FastForward module.
-    @next.addEventListener('click', () =>
-      console.log("Next clicked!")
-    )
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
